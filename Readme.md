@@ -41,7 +41,8 @@ site "http://community.opscode.com/api/v1"
 
 cookbook 'apt'
 cookbook 'build-essential'
-cookbook 'mysql', '5.5.3'
+#cookbook 'mysql', '5.5.3'
+cookbook 'postgresql', '~> 3.4.20'
 cookbook 'ruby_build'
 cookbook 'nodejs'
 cookbook 'rbenv', git: 'https://github.com/aminin/chef-rbenv'
@@ -78,9 +79,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "rbenv::user"
     chef.add_recipe "rbenv::vagrant"
     chef.add_recipe "vim"
-    chef.add_recipe "mysql::server"
-    chef.add_recipe "mysql::client"
+    chef.add_recipe "git"
+    
+    # PostgreSQL 
+    chef.add_recipe "postgresql::client"
+    chef.add_recipe "postgresql::all_packages"
+    # MySQL
+    #chef.add_recipe "mysql::server"
+    #chef.add_recipe "mysql::client"
 
+    # chef.add_recipe "memcached"
+    # chef.add_recipe "redis"
+    
     # Install Ruby 2.2.1 and Bundler
     # Set an empty root password for MySQL to make things simple
     chef.json = {
@@ -96,8 +106,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           }
         }]
       },
-      mysql: {
-        server_root_password: ''
+      "postgresql": {
+       "users": [
+         {
+           "username": "rails",
+           "password": "password",
+           "superuser": true,
+           "replication": false,
+           "createdb": true,
+           "createrole": false,
+           "inherit": true,
+           "replication": false,
+           "login": true
+         }
+       ]
       }
     }
   end
