@@ -36,98 +36,11 @@ touch Cheffile
 
 ### Set Cheffile
 
-```ruby
-site "http://community.opscode.com/api/v1"
-
-cookbook 'apt'
-cookbook 'build-essential'
-#cookbook 'mysql', '5.5.3'
-cookbook 'postgresql', '~> 3.4.20'
-cookbook 'ruby_build'
-cookbook 'nodejs'
-cookbook 'rbenv', git: 'https://github.com/aminin/chef-rbenv'
-cookbook 'vim'
-cookbook 'git'
-#cookbook 'redis'
-#cookbook 'memcached'
-```
+[Cheffile](Cheffile)
 
 ### Set Vagrantfile
 
-```ruby
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
-VAGRANTFILE_API_VERSION = "2"
-
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  # Use Ubuntu 14.04 Trusty Tahr 64-bit as our operating system
-  config.vm.box = "ubuntu/trusty64"
-
-  # Configurate the virtual machine to use 2GB of RAM
-  config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
-  end
-
-  # Forward the Rails server default port to the host
-  config.vm.network :forwarded_port, guest: 3000, host: 3000
-
-  # Use Chef Solo to provision our virtual machine
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = ["cookbooks", "site-cookbooks"]
-
-    chef.add_recipe "apt"
-    chef.add_recipe "nodejs"
-    chef.add_recipe "ruby_build"
-    chef.add_recipe "rbenv::user"
-    chef.add_recipe "rbenv::vagrant"
-    chef.add_recipe "vim"
-    chef.add_recipe "git"
-    
-    # PostgreSQL 
-    chef.add_recipe "postgresql::client"
-    chef.add_recipe "postgresql::all_packages"
-    # MySQL
-    #chef.add_recipe "mysql::server"
-    #chef.add_recipe "mysql::client"
-
-    # chef.add_recipe "memcached"
-    # chef.add_recipe "redis"
-    
-    # Install Ruby 2.2.1 and Bundler
-    # Set an empty root password for MySQL to make things simple
-    chef.json = {
-      rbenv: {
-        user_installs: [{
-          user: 'vagrant',
-          rubies: ["2.2.1"],
-          global: "2.2.1",
-          gems: {
-            "2.2.1" => [
-              { name: "bundler" }
-            ]
-          }
-        }]
-      },
-      "postgresql": {
-       "users": [
-         {
-           "username": "rails",
-           "password": "password",
-           "superuser": true,
-           "replication": false,
-           "createdb": true,
-           "createrole": false,
-           "inherit": true,
-           "replication": false,
-           "login": true
-         }
-       ]
-      }
-    }
-  end
-end
-```
+[Vagrantfile](Vagrantfile)
 
 ## Running Vagrant
 
@@ -142,3 +55,9 @@ Vagrant sets up the /vagrant folder as a shared directory between the virtual ma
 If you ever edit your Vagrantfile or Cheffile, you can use the following command to reconfigure the machine.
 
 `vagrant provision`
+
+### Troubleshooting
+
+1. `vagrant up` doesn't find provider
+Make sure your VirtualBox tools were added to `PATH`.
+For example, for Mac: `/Applications/VirtualBox.app/Contents/MacOS/`
