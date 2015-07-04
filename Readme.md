@@ -47,6 +47,9 @@ cookbook 'ruby_build'
 cookbook 'nodejs'
 cookbook 'rbenv', git: 'https://github.com/aminin/chef-rbenv'
 cookbook 'vim'
+cookbook 'git'
+#cookbook 'redis'
+#cookbook 'memcached'
 ```
 
 ### Set Vagrantfile
