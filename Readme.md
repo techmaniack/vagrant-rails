@@ -1,9 +1,20 @@
 # Setup Rails Vagrant environment
 
+## Table of Contents
+
+* [Setup Rails Vagrant environment](#setup-rails-vagrant-environment)
+  * [Install Vagrant](#install-vagrant)
+  * [Vagrant Plugins](#vagrant-plugins)
+  * [Setting Vagrant in Rails](#setting-vagrant-in-rails)
+    * [Set Cheffile](#set-cheffile)
+    * [Set Vagrantfile](#set-vagrantfile)
+* [Running Vagrant](#running-vagrant)
+  * [Reconfigure machine](#reconfigure-machine)
+
 ## Install Vagrant
 
-1. (Install Vagrant)[http://www.vagrantup.com/downloads.html]
-1. (Install VirtualBox)[https://www.virtualbox.org/wiki/Downloads]
+1. [Install Vagrant](http://www.vagrantup.com/downloads.html)
+1. [Install VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
 ## Vagrant Plugins
 
@@ -14,6 +25,7 @@
 vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-librarian-chef-nochef
 ```
+
 ## Setting Vagrant in Rails
 
 ```
@@ -24,7 +36,7 @@ touch Cheffile
 
 ### Set Cheffile
 
-```
+```ruby
 site "http://community.opscode.com/api/v1"
 
 cookbook 'apt'
@@ -38,7 +50,7 @@ cookbook 'vim'
 
 ### Set Vagrantfile
 
-```
+```ruby
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
